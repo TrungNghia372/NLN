@@ -26,7 +26,7 @@ require_once __DIR__ . '/../partials/db_connect.php';
                         <div class="bg-color rounded-top">
                             <hr class="mb-0"><h1 class="fs-5 text-center">Admin Menu</h1><hr class="mt-0">
                         </div>
-                        <a href="" class="list-group-item list-group-item-action">X</a>
+                        <a href="" class="list-group-item list-group-item-action">Xác nhận đơn hàng</a>
                         <a href="" class="list-group-item list-group-item-action">S</a>
                         <a href="" class="list-group-item list-group-item-action">T</a>
                         <a href="" class="list-group-item list-group-item-action">C</a>

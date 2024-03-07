@@ -14,7 +14,7 @@ require_once __DIR__ . '/../partials/db_connect.php';
             $_SESSION['cart'] = array();
         }
         $error = false;
-        $success = false;
+        $success = "";
         if (isset($_GET['action'])) {
             switch ($_GET['action']) {
         
@@ -97,13 +97,17 @@ require_once __DIR__ . '/../partials/db_connect.php';
                                 }
 
                                 include __DIR__ . '/../other/customer_id.php';
+                                $payValue = false;
+                                $statusValue = false;
 
-                                $stmt = $pdo->prepare("INSERT INTO `orders` (`customer_id`, `name`, `phone`, `address`, `note`, `total`) VALUES (:customer_id, :name, :phone, :address, :note, :total)");
+                                $stmt = $pdo->prepare("INSERT INTO `orders` (`customer_id`, `name`, `phone`, `address`, `note`, `pay`, `status`, `total`) VALUES (:customer_id, :name, :phone, :address, :note, :pay, :status, :total)");
                                 $stmt->bindParam(':customer_id', $customer_id);
                                 $stmt->bindParam(':name', $_POST['name']);
                                 $stmt->bindParam(':phone', $_POST['phone']);
                                 $stmt->bindParam(':address', $_POST['address']);
                                 $stmt->bindParam(':note', $_POST['note']);
+                                $stmt->bindParam(':pay', $payValue, PDO::PARAM_BOOL);
+                                $stmt->bindParam(':status', $statusValue, PDO::PARAM_BOOL);
                                 $stmt->bindParam(':total', $total);
                                 $stmt->execute();
                                 $orderID = $pdo->lastInsertId();
@@ -118,7 +122,11 @@ require_once __DIR__ . '/../partials/db_connect.php';
                                 $stmt->execute();
                                 $success = 'Đặt hàng thành công.';
                             }
-                        }
+                        } elseif (isset($_POST['qr_momo'])) {
+                            include_once __DIR__ . '/../other/qr_momo.php';
+                        } elseif (isset($_POST['atm_momo'])) {
+                            include_once __DIR__ . '/../other/atm_momo.php';
+                        } 
                         break;
                 }                    
         }
@@ -146,57 +154,56 @@ require_once __DIR__ . '/../partials/db_connect.php';
 
                     </div>
                 </div>
-
             </div>
         <?php } else { ?>
-            <form id="cart-form" action="giohang.php?action=submit" method="POST">
-            <table class="table table-bordered text-center">
-                <tr class="table-info">
-                    <th class="col-1">STT</th>
-                    <th class="col-4">Tên sản phẩm</th>
-                    <th class="col-2">Ảnh sản phẩm</th>
-                    <th class="col-1">Đơn giá</th>
-                    <th class="col-1">Số lượng</th>
-                    <th class="col-2">Thành tiền</th>
-                    <th class="col-1">Xóa</th>
-                </tr>
+            <form id="cart-form" action="giohang.php?action=submit" method="POST" target="_blank" enctype="application/x-www-form-urlencoded">
+                <table class="table table-bordered text-center">
+                    <tr class="table-info">
+                        <th class="col-1">STT</th>
+                        <th class="col-4">Tên sản phẩm</th>
+                        <th class="col-2">Ảnh sản phẩm</th>
+                        <th class="col-1">Đơn giá</th>
+                        <th class="col-1">Số lượng</th>
+                        <th class="col-2">Thành tiền</th>
+                        <th class="col-1">Xóa</th>
+                    </tr>
 
-                <?php
-                // Hiển thị sản phẩm đã thêm trong giỏ hàng
-                $totalAmount = 0;
-                if (!empty($_SESSION['cart'])) {
-                    $num = 1;
-                    foreach ($_SESSION['cart'] as $id => $product) {
-                        $query = "SELECT * FROM products WHERE `product_id` = :id";
-                        $statement = $pdo->prepare($query);
-                        $statement->bindValue(':id', $id, PDO::PARAM_INT);
-                        $statement->execute();
+                    <?php
+                    // Hiển thị sản phẩm đã thêm trong giỏ hàng
+                    $totalAmount = 0;
+                    if (!empty($_SESSION['cart'])) {
+                        $num = 1;
+                        foreach ($_SESSION['cart'] as $id => $product) {
+                            $query = "SELECT * FROM products WHERE `product_id` = :id";
+                            $statement = $pdo->prepare($query);
+                            $statement->bindValue(':id', $id, PDO::PARAM_INT);
+                            $statement->execute();
 
-                        if ($statement->rowCount() != 0) {
-                            $row = $statement->fetch(PDO::FETCH_ASSOC);
-                            $subtotal = $product['quantity'] * $row['price'];
-                            $totalAmount += $subtotal;
-                            ?>
-                            <tr>
-                                <td class="col-1"><?= $num++ ?></td>
-                                <td class="col-4"><?= $row['name_product'] ?></td>
-                                <td class="col-2"><img class="w-100" src="<?= $row['image_url'] ?>"></td>
-                                <td class="col-1"><?=number_format($row['price'],0,',','.')?>đ</td>
-                                <td class="col-1"><input type="number" value="<?= $product['quantity'] ?>" name="quantity[<?=$product['product_id']?>]" style="width: 50px;"></td>
-                                <td class="col-2"><?=number_format($subtotal,0,',','.')?>đ</td>
-                                <td class="col-1"><a class="nav-link" href="giohang.php?action=delete&id=<?=$row['product_id']?>">Xóa</a></td>
-                            </tr>
-                            <?php
+                            if ($statement->rowCount() != 0) {
+                                $row = $statement->fetch(PDO::FETCH_ASSOC);
+                                $subtotal = $product['quantity'] * $row['price'];
+                                $totalAmount += $subtotal;
+                                ?>
+                                <tr>
+                                    <td class="col-1"><?= $num++ ?></td>
+                                    <td class="col-4"><?= $row['name_product'] ?></td>
+                                    <td class="col-2"><img class="w-100" src="<?= $row['image_url'] ?>"></td>
+                                    <td class="col-1"><?=number_format($row['price'],0,',','.')?>đ</td>
+                                    <td class="col-1"><input type="number" value="<?= $product['quantity'] ?>" name="quantity[<?=$product['product_id']?>]" style="width: 50px;"></td>
+                                    <td class="col-2"><?=number_format($subtotal,0,',','.')?>đ</td>
+                                    <td class="col-1"><a class="nav-link" href="giohang.php?action=delete&id=<?=$row['product_id']?>">Xóa</a></td>
+                                </tr>
+                                <?php
+                            }
                         }
                     }
-                }
-                ?>
+                    ?>
 
-                <tr>
-                    <td colspan="5" class="table-info"><b>Tổng tiền:</b></td>
-                    <td colspan="2"><b><?=number_format($totalAmount,0,',','.')?>đ</b></td>
-                </tr>
-            </table>
+                    <tr>
+                        <td colspan="5" class="table-info"><b>Tổng tiền:</b></td>
+                        <td colspan="2"><b><?=number_format($totalAmount,0,',','.')?>đ</b></td>
+                    </tr>
+                </table>
 
             <div class="d-flex justify-content-end">
                 <button type="submit" name="update_click" class="btn btn-success">Cập nhật</button>
@@ -239,8 +246,11 @@ require_once __DIR__ . '/../partials/db_connect.php';
                         </div>
                     </div>
                     <div class="row mb-3">
+                        <b>Phương thức thanh toán:</b>
                         <div class="d-flex justify-content-end">
-                            <button type="submit" class="btn btn-success" name="order_click">Đặt hàng</button>
+                            <button type="submit" class="btn btn-success ms-2" name="order_click">Khi nhận hàng</button>
+                            <button type="submit" class="btn btn-success ms-2" name="qr_momo">MoMo QR Code</button>
+                            <button type="submit" class="btn btn-success ms-2" name="atm_momo">MoMo ATM</button>
                         </div>
                     </div>
                 </div>
