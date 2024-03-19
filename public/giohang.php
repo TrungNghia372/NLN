@@ -156,7 +156,7 @@ require_once __DIR__ . '/../partials/db_connect.php';
                 </div>
             </div>
         <?php } else { ?>
-            <form id="cart-form" action="giohang.php?action=submit" method="POST" target="_blank" enctype="application/x-www-form-urlencoded">
+            <form id="cart-form" action="giohang.php?action=submit" method="POST" enctype="application/x-www-form-urlencoded">
                 <table class="table table-bordered text-center">
                     <tr class="table-info">
                         <th class="col-1">STT</th>

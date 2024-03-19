@@ -26,10 +26,10 @@ require_once __DIR__ . '/../partials/db_connect.php';
                         <div class="bg-color rounded-top">
                             <hr class="mb-0"><h1 class="fs-5 text-center">Admin Menu</h1><hr class="mt-0">
                         </div>
-                        <a href="" class="list-group-item list-group-item-action">Xác nhận đơn hàng</a>
-                        <a href="" class="list-group-item list-group-item-action">S</a>
-                        <a href="" class="list-group-item list-group-item-action">T</a>
-                        <a href="" class="list-group-item list-group-item-action">C</a>
+                        <a href="admin.php" class="list-group-item list-group-item-action">Quản lý sản phẩm</a>
+                        <a href="#" class="list-group-item list-group-item-action">Quản lý người dùng</a>
+                        <a href="admin.php?action=accept&status=0" class="list-group-item list-group-item-action">Xác nhận đơn hàng</a>
+                        <a href="#" class="list-group-item list-group-item-action">Tiếp nhận phản hồi</a>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,13 @@ require_once __DIR__ . '/../partials/db_connect.php';
             <div class="col-lg-9">
                 <div class="row">
                     <div class="d-flex justify-content-end">
-                        <a href="" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#add_product" data-bs-whatever="@mdo">Thêm sản phẩm</a>
+
+                        <?php if (isset($_GET['action']) && $_GET['action'] == 'accept') { ?>
+                            <a href="admin.php?action=accept&status=1" type="button" class="btn btn-outline-success ms-2" >Đã xác nhận</a>
+                            <a href="admin.php?action=accept&status=0" type="button" class="btn btn-outline-success ms-2" >Chưa xác nhận</a>
+                        <?php }  else { ?>
+                            <a href="" type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#add_product" data-bs-whatever="@mdo">Thêm sản phẩm</a>
+                        <?php } ?>
 
                         <div class="modal fade" id="add_product" tabindex="-1" aria-labelledby="add_product" aria-hidden="true">
                             <div class="modal-dialog">
@@ -133,6 +139,8 @@ require_once __DIR__ . '/../partials/db_connect.php';
                 <?php 
                     if (isset($_GET['action']) && $_GET['action'] == 'edit') { 
                         include_once __DIR__ . '/../admin/edit_form.php';
+                    } else if (isset($_GET['action']) && $_GET['action'] == 'accept') {
+                        include_once __DIR__ . '/../admin/accept_orders.php';
                     } else {
                 ?>
                 <div class="row">
@@ -179,5 +187,7 @@ require_once __DIR__ . '/../partials/db_connect.php';
                 <?php } ?>
             </div>
         </div>
+
+        
     </div>
 <main>

@@ -61,7 +61,7 @@ if (session_status() === PHP_SESSION_NONE) {
                     </ul>
                     <div class="navbar-nav ml-auto">
                         <?php
-                        if ( (isset($_SESSION['loggedin']) && ($_SESSION['loggedin']) === true) && (basename($_SERVER['PHP_SELF']) != 'logout.php')) {
+                        if ((isset($_SESSION['username']) && ($_SESSION['username']) != 'admin') && (basename($_SERVER['PHP_SELF']) != 'logout.php')) {
                             echo '<p><div class="dropdown">
                             <button class="btn btn-outline-success" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fa-solid fa-user"></i>

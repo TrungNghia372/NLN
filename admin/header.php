@@ -1,9 +1,7 @@
 <?php
-
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
 ?>
 
 <!doctype html>
@@ -32,8 +30,103 @@ if (session_status() === PHP_SESSION_NONE) {
 
             
             <div class="d-flex">
-                <a href="admin.php" class="navbar-nav nav-link px-2 me-2 btn btn-outline-success">Trang chủ</a>
-                <a href="logout.php" class="navbar-nav nav-link px-2 me-2 btn btn-outline-success">Đăng xuất</a>
+                
+                <?php if (isset($_SESSION['admin']) && $_SESSION['admin'] == 'admin') { ?>
+                    <a href="admin.php" class="navbar-nav nav-link px-2 me-2 btn btn-outline-success">Trang chủ</a>
+                    <a href="logout_admin.php" class="navbar-nav nav-link px-2 me-2 btn btn-outline-success">Đăng xuất</a>       
+                <?php } else if (!isset($_SESSION['admin'])) { ?>
+                    <a href="#" type="button" class="navbar-nav nav-link px-2 me-2 btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal_admin1" data-bs-whatever="@mdo">Đăng Nhập</a>
+                    <a href="#" type="button" class="navbar-nav nav-link px-2 me-2 btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#exampleModal_admin2" data-bs-whatever="@mdo">Đăng Ký</a>
+                <?php } ?>
+
+                        <!-- ĐĂNG NHẬP -->
+                        <div class="modal fade" id="exampleModal_admin1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-color">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Đăng Nhập</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form  method="POST" action="login.php">
+                                            <div class="form-group mb-3">
+                                                <label for="usernameInput"><i class="fas fa-user mb-3"></i> Tài khoản:</label>
+                                                <input class="form-control" placeholder="" name="usernameLogin" />
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="usernameInput"><i class="fas fa-user mb-3"></i> Email:</label>
+                                                <input type="email" class="form-control" placeholder="Nhập email" name="emailLogin" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="passwordInput"><i class="fa-solid fa-lock mb-3"></i> Mật khẩu:</label>
+                                                <input type="password" class="form-control" placeholder="Nhập mật khẩu" name="passwordLogin"/>
+                                                <div class="form-group form-check col-md-6">
+                                                    <input type="checkbox" class="form-check-input">
+                                                    <label class="form-check-label">Ghi nhớ đăng nhập</label>
+                                                </div>
+                                            </div>
+ 
+                                            <div class="text-end">
+                                                <button class="btn btn-success btn-block" id="loginBtn"><img style="width: 15px;" src="img/icon.png" alt=""> Đăng nhập</button>
+                                            </div> 
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <p><a class="sign-in" href="#">Tạo tài khoản</a></p>
+                                        <p><a class="sign-in" href="#">Quên Mật khẩu?</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ===== -->
+
+
+                        <!-- ĐĂNG KÝ -->
+                        <div class="modal fade" id="exampleModal_admin2" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header bg-color">
+                                        <h1 class="modal-title fs-5" id="exampleModalLabel">Đăng Ký</h1>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    
+                                    <div class="modal-body">
+                                        <form action="register.php" method="POST">
+                                            <div class="form-group mb-3">
+                                                <label for="usernameInput"><i class="fas fa-user mb-3"></i> Tài khoản:</label>
+                                                <input class="form-control" placeholder="" name="usernameRegister" required/>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="passwordInput"><i class="fa-solid fa-lock mb-3"></i> Email:</label>
+                                                <input class="form-control" type="email" placeholder="VD: qtnghia2002@gmail.com" name="emailRegister" required/>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="passwordInput"><i class="fa-solid fa-lock mb-3"></i> Mật khẩu:</label>
+                                                <input class="form-control" type="password" placeholder="Nhập mật khẩu" name="passwordRegister1" required/>
+                                            </div>
+
+                                            <div class="form-group mb-3">
+                                                <label for="passwordInput"><i class="fa-solid fa-lock mb-3"></i> Nhập lại mật khẩu:</label>
+                                                <input class="form-control" type="password" placeholder="Nhập lại mật khẩu" name="passwordRegister2" required/>
+                                            </div>
+
+                                            <hr>
+                                            <div class="d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-success btn-block mb-1" id="registerBtn">
+                                                    <img style="width: 15px;" src="img/icon.png" alt=""> Đăng ký
+                                                </button>
+                                            </div>
+
+                                        </form>  
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- ====== -->
             </div>
         </div>
     </nav>

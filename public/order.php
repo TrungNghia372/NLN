@@ -17,44 +17,64 @@ include __DIR__ . '/../other/customer_id.php';
     ?>
 
     <h1 class="text-center"><hr>Đơn Hàng<hr></h1>
-    <?php while ($row = $statement->fetch()) { ?>
+    <?php while ($row = $statement->fetch()) { 
+        $pay ="";
+        if ($row['pay'] == 0) {
+            $pay = "❌";
+        } else if ($row['pay'] == 1) {
+            $pay = "✔";
+        }
+
+        if ($row['status'] == 0) {
+            $status = "Chờ xác nhận";
+        } else if ($row['status'] == 1) {
+            $status = "Đã xác nhận";
+        }
+    ?>
     <div class="row mb-2">
-        <div class="col-2"></div>
-        <div class="col-8 bg-color rounded">
+        <div class="col-1"></div>
+        <div class="col-10 bg-color rounded">
             <div class="row">
-                <div class="col-4  my-2">
+                <div class="col-3  my-2">
                     <img src="img/order.JPG" class="rounded float-start card-img-top" alt="...">
                 </div>
-                <div class="col-8 my-2">
+                <div class="col-9 my-2">
 
                     <?php $id = $row['order_id'] ?>
                     <div class="row">
-                        <div class="col-6">
-                            <h4>#Đơn hàng <?=$id?></h4>
+                        <div class="col-8">
+                            <h4>#Mã đơn hàng <?=$id?></h4>
                         </div>
-                        <div class="col-6">
+                        <div class="col-4">
                             <p><b>Thời gian:</b> <?=htmlspecialchars($row['create_time'])?></p>
                         </div>
-                        
                     </div>
 
                     <div class="row">
                         <div class="row">
-                            <div class="col-7">
+                            <div class="col-4">
                                 <p><b>Tên:</b> <?=htmlspecialchars($row['name'])?></p>
                             </div>
 
-                            <div class="col-5">
+                            <div class="col-4">
+                                <p><b>Địa chỉ:</b> <?=htmlspecialchars($row['address'])?></p>
+                            </div>
+
+                            <div class="col-4">
                                 <p><b>Số điện thoại:</b> <?=htmlspecialchars($row['phone'])?></p>
                             </div>
                         </div>
 
                         <div class="row">
-                            <div class="col-7">
-                                <p><b>Địa chỉ:</b> <?=htmlspecialchars($row['address'])?></p>
+                            <div class="col-4">
+                                <p><b>Thanh toán:</b> <?=htmlspecialchars($pay)?> </p>
                             </div>
 
-                            <div class="col-5">
+                            <div class="col-4">
+                                <p><b>Tình trạng:</b> <?=htmlspecialchars($status)?> </p>
+                            </div>
+
+                            <div class="col-4">
                                 <p><b>Tổng tiền:</b> <?=number_format(htmlspecialchars($row['total']), 0, ',', '.')?>đ</p>
                             </div>
                         </div>

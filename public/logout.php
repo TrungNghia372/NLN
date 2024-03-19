@@ -7,11 +7,17 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start(); // Khởi động phiên làm việc nếu chưa tồn tại
 }
 
-// if (isset($_SESSION['loggedin'])) {
-//     unset($_SESSION['loggedin']);
-// }
+// if (isset($_SESSION['admin']) && (basename($_SERVER['PHP_SELF']) == 'admin.php')) {
+//     unset($_SESSION['admin']);
 
-session_destroy();
+//     header("Location: admin.php");
+//     exit();
+// } else
+if (isset($_SESSION['username'])) {
+    unset($_SESSION['username']);
+}
 
 header("Location: index.php");
 exit();
+// session_destroy();
+

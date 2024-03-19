@@ -16,23 +16,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $email = $_POST['emailLogin'];
         $password = $_POST['passwordLogin'];
 
-        if ($username == 'admin' && (strtolower($email) == 'me@example.com') && ($password == 'testpass')) {
-            $_SESSION['username'] = 'admin';
-            $loggedin = true;
-
-            header("Location: admin.php");
-            exit();
-        }
-
         $query = "SELECT * FROM customers WHERE username = :username AND email = :email";
         $statement = $pdo->prepare($query);
         $statement->execute([':username' => $username, ':email' => $email]);
 
         $user = $statement->fetch();
         
-        if ($user && password_verify($password, $user['password'])) {
+        if ($username == 'admin' && (strtolower($email) == 'me@example.com') && ($password == 'testpass')) {
+            $_SESSION['admin'] = 'admin';
             $loggedin = true;
-            $_SESSION['loggedin'] = $loggedin;
+
+            // var_dump($_SESSION['username']);
+            header("Location: admin.php");
+            exit();
+        } else if ($user && password_verify($password, $user['password'])) {
+            $loggedin = true;
+            // $_SESSION['loggedin'] = $loggedin;
             $_SESSION['username'] = $username;
 
             header("Location: index.php");
