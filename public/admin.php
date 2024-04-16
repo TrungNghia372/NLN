@@ -7,7 +7,10 @@ require_once __DIR__ . '/../partials/db_connect.php';
 ?>
 
 <main>
+    
     <div class="container">
+        <?php        if (isset($_SESSION['admin']) && $_SESSION['admin'] == 'admin') {    ?>
+
         <div class="row mt-3">
             <hr>
 
@@ -188,6 +191,17 @@ require_once __DIR__ . '/../partials/db_connect.php';
             </div>
         </div>
 
+        <?php        }  else {        ?>
+            
+            <div class="mt-2 text-center">
+                <h1><hr> Thông Báo <hr></h1>
+                <p>Vui lòng đăng nhập tài khoản.</p>
+            </div>
+
+        <?php   }    ?>
+
         
     </div>
 <main>
+
+<?php include_once __DIR__ . '/../partials/footer.php'; ?>

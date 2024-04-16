@@ -73,6 +73,6 @@ if (isset($row_select) && !empty($row_select)) {
                 <img style="width: 15px;" src="img/icon.png" alt=""> Xác nhận
             </button>
         </div>
-    </form>
+</form>
 
 <?php } ?>

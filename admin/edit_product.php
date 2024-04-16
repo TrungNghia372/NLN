@@ -34,7 +34,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit') {
             $description = $_POST['description_product'];
             $img = 'img/' . basename($_POST['img_product']);
             $category = $_POST['select_category'];
-    
+
             if (!empty($name) && !empty($quantity) && !empty($price) && !empty($description) && !empty($img) && !empty($category)) {
                 $edit_product = 'UPDATE products SET name_product=:name, description=:description, price=:price, image_url=:img, quantity=:quantity, category_id=:category WHERE product_id=:id';
     

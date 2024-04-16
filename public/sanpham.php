@@ -152,7 +152,16 @@ require_once __DIR__ . '/../partials/db_connect.php';
                                                                 <img class="w-100" src="<?=$row['image_url']?>" alt="">
                                                                 <h5 class="mt-3"><?=$row['name_product']?></h5>
                                                                 <p><?=$row['description']?></p>
-                                                                <p class="card-text">Giá: <?=number_format(htmlspecialchars($row['price']), 0, ',', '.')?>đ</p>
+                                                                <div class="row">
+                                                                    <div class="col-6">
+                                                                        <p class="card-text">Giá: <?=number_format(htmlspecialchars($row['price']), 0, ',', '.')?>đ</p>
+                                                                    </div>
+
+                                                                    <div class="col-6">
+                                                                        <p>Số lượng: <?=$row['quantity']?></p>
+                                                                    </div>
+                                                                </div>
+                                                                
                                                             </form>
                                                         </div>
                                                         <div class="modal-footer">

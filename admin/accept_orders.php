@@ -37,7 +37,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'accept' && isset($_GET['status
                 <th class="col-1">Thời gian</th>
                 <th class="col-1">Thanh toán</th>
                 <th class="col-1">Chi tiết</th>
+            <?php if ($status != 1 )  { ?>
                 <th class="col-1">Xác nhận</th>
+            <?php } ?>
                 <!-- <th class="col-1">Hủy</th> -->
             </tr>
 
@@ -56,6 +58,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'accept' && isset($_GET['status
                 <td class="col-1"> <?= $row_select_orders['create_time'] ?> </d>
                 <td class="col-1"> <?= $pay ?> </td>
                 <td class="col-1"> <button class="btn btn-outline-success btn-block" data-bs-toggle="modal" data-bs-target="#exampleModal2_<?=$row_select_orders['order_id']?>" data-bs-whatever="@mdo"> Xem </button> </td>               
+                
+                <?php if ($status != 1) { ?>
+
                 <td class="col-1">
                     <a href="admin.php?action=accept&status=0&id=<?= $row_select_orders['order_id'] ?> " type="button" class="btn btn-outline-success ms-2">Duyệt</a>
 
@@ -73,6 +78,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'accept' && isset($_GET['status
                     ?>
                 </td>
 
+                <?php } ?>
+                
                 <div class="modal fade" id="exampleModal2_<?=$row_select_orders['order_id']?>" tabindex="-1" aria-labelledby="exampleModal2_<?=$row_select_orders['order_id']?>" aria-hidden="true">
                     <div class="modal-dialog modal-lg modal-dialog-scrollable">
                             <div class="modal-content">

@@ -1,7 +1,7 @@
 <?php 
 define('TITLE', 'Liên Hệ');
 
-include_once __DIR__ . '/../partials/header.php'; 
+include_once __DIR__ . '/../partials/header.php';
 ?>
 
 <main>
@@ -30,7 +30,7 @@ include_once __DIR__ . '/../partials/header.php';
                 <div class="col-md m-3 pt-3 text-center bg-service">
                     <i class="fa-solid fa-envelope icon fs-1"></i>
                     <h2>Email</h2>
-                    <p>cactustn372@gmail.com</p>
+                    <p>qtnghia2002@gmail.com</p>
                 </div>
 
                 
@@ -42,21 +42,26 @@ include_once __DIR__ . '/../partials/header.php';
             </div>
         </div>
 
-
         <div class="col-md-6 col-xs-12">
-            <form name="lienhe" action="#" method="post" enctype="application/x-www-form-urlencoded">
+            <form name="lienhe" action="lienhe.php?action=mail" method="post" enctype="application/x-www-form-urlencoded">
                 <h1 class="text-center mt-3">Góp ý</h1>
+                <?php
+                if (isset($_GET['action']) && $_GET['action'] == 'mail') {
+                    include_once __DIR__ . '/../email/send_mail.php';
+                } else {
+                ?>
                 <div class="forms text-center">
                     <div class="mb-2">
-                        <label for="exampleFormControlInput1" name="form-label "><b>Email</b></label>
-                        <input required type="email" class="form-control" id="exampleFormControlInput1" placeholder="nghiab2005725@student.ctu.edu.vn">
+                        <label for="exampleFormControlInput1" name="form-label "><b>Tiêu đề</b></label>
+                        <input required class="form-control"  name="subject" id="exampleFormControlInput1" placeholder="">
                       </div>
                       <div class="mb-2">
-                        <label for="exampleFormControlTextarea1" class="form-label"><b>Nội dung góp ý</b></label>
-                        <textarea required class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        <label for="exampleFormControlTextarea1" class="form-label"><b>Nội dung</b></label>
+                        <textarea required class="form-control" name="content" id="exampleFormControlTextarea1" rows="3"></textarea>
                       </div>
                       <div class="mb-2"><input type="submit" class="btn btn-success" value="Gửi"></div>      
                 </div>
+                <?php } ?>
             </form>
         </div>
     </div>
