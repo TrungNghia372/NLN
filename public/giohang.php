@@ -87,7 +87,7 @@ require_once __DIR__ . '/../partials/db_connect.php';
                                 $stmt = $pdo->prepare("SELECT * FROM `products` WHERE `product_id` IN ($placeholders)");
                                 $stmt->execute($productIds);
                                 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
+                                
                                 $total = 0;
                                 $orderProducts = array();
 
@@ -110,16 +110,36 @@ require_once __DIR__ . '/../partials/db_connect.php';
                                 $stmt->bindParam(':status', $statusValue, PDO::PARAM_BOOL);
                                 $stmt->bindParam(':total', $total);
                                 $stmt->execute();
+
                                 $orderID = $pdo->lastInsertId();
 
                                 $insertString = "";
+                                
                                 foreach ($orderProducts as $key => $product) {
                                     $insertString .= "('".$orderID."', '".$product['product_id']."', '".$product['name_product']."', '".$product['image_url']."', '".$_POST['quantity'][$product['product_id']]."', '".$product['price']."'),";
                                 }
                                 $insertString = rtrim($insertString, ',');
-
+                                
                                 $stmt = $pdo->prepare("INSERT INTO `orderItems` (`order_id`, `product_id`, `name_product`, `image_url`, `quantity`, `price`) VALUES $insertString");
                                 $stmt->execute();
+
+                                // // var_dump($insertString, $newQuantity, $id); exit;
+
+                                // Tạo chuỗi dùng cho câu lệnh UPDATE
+                                $newQuantity = "";
+                                $id = "";
+                                foreach ($orderProducts as $key => $product) {
+                                    $newQuantity .= "WHEN ".$product['product_id']." THEN ".$product['quantity'] - $_POST['quantity'][$product['product_id']]." ";
+                                    $id .= $product['product_id'].",";
+                                }
+                                $newQuantity = rtrim($newQuantity, ' ');
+                                $id = rtrim($id, ',');
+
+                                // Chuẩn bị và thực thi câu lệnh UPDATE
+                                $stmt_update_quantity = $pdo->prepare("UPDATE products SET quantity = CASE product_id ".$newQuantity." END WHERE product_id IN (".$id.")");
+                                $stmt_update_quantity->execute();
+
+                                
                                 $success = 'Đặt hàng thành công.';
                             }
                         } elseif (isset($_POST['qr_momo'])) {
